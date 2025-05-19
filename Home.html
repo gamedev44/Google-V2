@@ -222,7 +222,7 @@
       clearTimeout(collapseTimer);
       collapseTimer = setTimeout(()=>{
         sec.classList.add('collapsed');
-      }, 5000);
+      }, 1300);
     }
 
     window.addEventListener('load', ()=>{
@@ -230,7 +230,7 @@
       scheduleCollapse();
 
       setTimeout(()=>{
-        logo.style.opacity = '0';
+        logo.style.opacity = '0.8';
         setTimeout(()=>{
           logo.src = 'Logo/Static/Static.gif';
           logo.style.opacity = '1';
