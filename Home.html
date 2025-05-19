@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Google V2 Home</title>
   <style>
     html { height: 100%; }
@@ -16,18 +17,16 @@
       align-items: center;
       justify-content: flex-start;
       height: calc(var(--vh) * 100);
-      padding-top: 6em;  /* push content down so logo sits below top nav */
-      padding-bottom: 4.5em; /* room for bottom nav + footer */
+      padding-top: 6em;
+      padding-bottom: 4.5em;
       opacity: 0;
       transition: opacity 2.5s ease;
     }
     body.loaded { opacity: 1; }
 
-    /* hide native scrollbar */
     ::-webkit-scrollbar { width: 0; height: 0; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* shared nav styles */
     nav {
       position: fixed;
       width: 100%;
@@ -44,17 +43,14 @@
       font-weight: bold;
       white-space: nowrap;
     }
-
-    /* top nav overrides */
     nav.top-nav { top: 0; }
-
-    /* bottom nav overrides */
     nav.bottom-nav { bottom: 0; }
 
     .logo {
       max-width: 220px;
       margin: 2.5em 0 1em;
-      transition: opacity 1s;
+      opacity: 1;
+      transition: opacity 1s ease;
     }
 
     .search-section {
@@ -74,9 +70,9 @@
       width: min(30em, 90vw);
       height: 2.5em;
       border-radius: 2.5em;
-      transition: width 0.5s, border-radius 0.5s;
       overflow: hidden;
       background: #444;
+      transition: width 0.5s, border-radius 0.5s;
     }
     .search-section.collapsed .search-bar-container {
       width: 3em;
@@ -226,6 +222,8 @@
     const input = document.getElementById('search-bar');
     const btn = document.getElementById('search-btn');
     const navs = document.querySelectorAll('.nav-btns button');
+    const logo = document.getElementById('main-logo');
+    const GIF_DURATION = 7570; // match original GIF length
 
     function runSearch(type){
       const q = input.value.trim();
@@ -253,9 +251,15 @@
     window.addEventListener('load', ()=>{
       document.body.classList.add('loaded');
       scheduleCollapse();
+
+      // play GIF once, then fade to static and never revert
       setTimeout(()=>{
-        document.getElementById('main-logo').src = "Logo/Static/Static.gif";
-      }, 7570);
+        logo.style.opacity = '0.8';
+        setTimeout(()=>{
+          logo.src = 'Logo/Static/Static.gif';
+          logo.style.opacity = '1';
+        }, 700);
+      }, GIF_DURATION);
 
       sec.addEventListener('mouseenter', ()=>{
         sec.classList.remove('collapsed');
@@ -274,8 +278,7 @@
       btn.addEventListener('click', runDefaultSearch);
 
       navs.forEach(b=>{
-        const t = b.dataset.type;
-        b.addEventListener('click', ()=>toggleType(b, t));
+        b.addEventListener('click', ()=>toggleType(b, b.dataset.type));
       });
     });
   </script>

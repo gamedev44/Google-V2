@@ -7,7 +7,7 @@
   <meta name="keywords" content="Risk, Google Search, Modern UI, Responsive design, Search functionality" />
   <meta name="author" content="Risk" />
   <meta property="og:title" content="Risk's Modern Google Search UI" />
-  <meta property="og:description" content="A fresh, improved, and modern way to search Google with new UI and functionality responsiveness." />
+  <meta property="og:description" content="A fresh, improved, and modern way to search Google with new UI and functional responsiveness." />
   <meta property="og:image" content="Logo/Gif/LoaderLogo.gif" />
   <title>Loading...</title>
   <style>
@@ -139,20 +139,15 @@
     const infoModal = document.getElementById('info-modal');
     const blackout = document.getElementById('blackout');
 
-    // show info modal on load
     infoModal.style.display = 'block';
     infoModal.addEventListener('click', () => {
       infoModal.style.display = 'none';
     });
 
-    // Test image to check remote availability
     const testRemote = new Image();
     testRemote.src = "https://i.pinimg.com/originals/21/21/52/2121524ed1fa00d650d702070008ff2a.gif";
 
-    let remoteLoaded = false;
-
     testRemote.onload = () => {
-      remoteLoaded = true;
       loaderDots.style.display = "flex";
       checkBothDone();
     };
