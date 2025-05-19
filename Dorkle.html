@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dorkle — Google Dork Generator</title>
+  <style>
+    html { height: 100%; }
+    body {
+      --vh: 1vh;
+      background: #121212;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: calc(var(--vh) * 100);
+      margin: 0;
+      padding-top: 5.5em;    /* space for top nav */
+      padding-bottom: 4.5em; /* space for footer/nav */
+      overflow: hidden;
+    }
+    /* hide scrollbars */
+    ::-webkit-scrollbar { width: 0; height: 0; }
+    body { -ms-overflow-style: none; scrollbar-width: none; }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #181818;
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      padding: 1em;
+      z-index: 10;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .logo {
+      max-width: 220px;
+      margin: 1.5em 0;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 1em;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      width: min(30em, 90vw);
+    }
+
+    .controls input[type="text"],
+    .controls select {
+      width: 100%;
+      padding: 0.75em 1em;
+      font-size: 1em;
+      border-radius: 30px;
+      border: none;
+      background: #2c2c2c;
+      color: white;
+      transition: background 0.3s;
+    }
+    .controls input[type="text"]:focus,
+    .controls select:focus {
+      background: #444;
+      outline: none;
+    }
+
+    .preview {
+      font-style: italic;
+      color: #ccc;
+      width: 100%;
+      text-align: center;
+      min-height: 1.2em;
+    }
+
+    .btn {
+      padding: 0.6em 1.5em;
+      font-size: 1em;
+      background: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+    .btn:hover {
+      background: #03a9f4;
+      transform: scale(1.05);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 3.5em;
+      width: 100%;
+      text-align: center;
+      font-size: 0.85em;
+      color: #ccc;
+    }
+    footer a { color: #4ea3ff; text-decoration: none; }
+
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      top: auto;
+    }
+
+    @media (max-width: 600px) {
+      .controls { gap: 0.75em; }
+      .controls input, .controls select { font-size: 0.9em; padding: 0.6em; }
+      .btn { padding: 0.5em 1.2em; font-size: 0.9em; }
+      footer { font-size: 0.75em; }
+      nav { gap: 1em; padding: 0.8em; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="Home.html">Home</a>
+    <a href="Lense.html">Lens</a>
+    <a href="Dorkle.html">Dorkle</a>
+  </nav>
+
+  <img class="logo" src="Logo/Static/Static.gif" alt="Static Logo">
+
+  <h1>Dorkle</h1>
+
+  <div class="controls">
+    <input id="baseQuery" type="text" placeholder="Enter a normal query…" oninput="updatePreview()" autofocus />
+    <select id="dorkType" onchange="updatePreview()">
+      <option value="site:">site:</option>
+      <option value="filetype:">filetype:</option>
+      <option value="intitle:">intitle:</option>
+      <option value="inurl:">inurl:</option>
+      <option value="ext:">ext:</option>
+      <option value="allintext:">allintext:</option>
+      <option value="cache:">cache:</option>
+    </select>
+    <div class="preview" id="dorkPreview">Preview will appear here…</div>
+    <button class="btn" onclick="runDork()">Search Google</button>
+  </div>
+
+  <footer>
+    Google V2 Alpha Edition 2025&nbsp;|&nbsp;
+    Created by: Risk&nbsp;|&nbsp;
+    <a href="https://gist.github.com/gamedev44/04c21006def2d0ffe54ecc1b57aca2cd" target="_blank">My Resume</a>
+  </footer>
+
+  <nav class="bottom-nav">
+    <a href="Home.html">Home</a>
+    <a href="Lense.html">Lens</a>
+    <a href="Dorkle.html">Dorkle</a>
+  </nav>
+
+  <script>
+    // dynamic vh to avoid taskbar cutoff
+    function setVh(){
+      document.documentElement.style.setProperty('--vh', window.innerHeight*0.01+'px');
+    }
+    window.addEventListener('resize', setVh);
+    setVh();
+
+    function updatePreview() {
+      const q = document.getElementById('baseQuery').value.trim();
+      const t = document.getElementById('dorkType').value;
+      document.getElementById('dorkPreview').textContent =
+        q ? `${t}${q}` : 'Preview will appear here…';
+    }
+
+    function runDork() {
+      const q = document.getElementById('baseQuery').value.trim();
+      const t = document.getElementById('dorkType').value;
+      if (!q) return alert('Please enter a search term.');
+      const url = `https://www.google.com/search?q=${encodeURIComponent(t+q)}`;
+      window.open(url, '_blank');
+    }
+
+    document.getElementById('baseQuery').addEventListener('keydown', e => {
+      if (e.key === 'Enter') runDork();
+    });
+  </script>
+</body>
+</html>

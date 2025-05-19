@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loading...</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .fade-letter span {
+      opacity: 0;
+      display: inline-block;
+      animation: fadeInLetter 0.4s forwards;
+    }
+
+    @keyframes fadeInLetter {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-wrapper {
+      margin-top: 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5em;
+    }
+
+    .loader-dots {
+      display: flex;
+      gap: 1em;
+      margin-top: 1em;
+    }
+
+    .loader-dots img {
+      width: 400px;
+      height: 400px;
+      animation: blink 1.2s infinite ease-in-out alternate;
+      opacity: 0;
+    }
+
+
+    .loader-dots img:nth-child(1) { animation-delay: 0s; }
+    .loader-dots img:nth-child(2) { animation-delay: 0.3s; }
+    .loader-dots img:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes blink {
+      to { opacity: 1; transform: scale(1.1); }
+    }
+
+    .logo-wrapper img#local-logo {
+      max-width: 220px;
+      animation: fadeIn 1.5s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .modal {
+      position: absolute;
+      top: 20px;
+      background: crimson;
+      padding: 1em 2em;
+      border-radius: 6px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .blackout {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2s ease;
+      z-index: 10;
+    }
+
+    .blackout.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="welcome" class="fade-letter"></div>
+
+  <div class="logo-wrapper">
+    <img id="local-logo" src="Logo/Gif/LoaderLogo.gif" alt="Local Loader Logo" /> <!-- IT LOADS THIS LARGE LOAD LOGO ABOVE -->
+
+    <div class="loader-dots" id="loader-dots" style="display: none;">
+      <!-- 3 blinking remote loader dots -->
+      <img src="https://i.ibb.co/CppWL2Sg/loader-Dot.gif" alt="dot">
+      <img src="https://i.ibb.co/CppWL2Sg/loader-Dot.gif" alt="dot">
+      <img src="https://i.ibb.co/CppWL2Sg/loader-Dot.gif" alt="dot">
+    </div>
+  </div>
+
+  <div class="modal" id="no-internet">⚠️ No Internet Connection. Remote loader failed.</div>
+  <div class="blackout" id="blackout"></div>
+
+  <script>
+    const welcomeText = "Welcome";
+    const welcomeEl = document.getElementById("welcome");
+    welcomeText.split("").forEach((letter, i) => {
+      const span = document.createElement("span");
+      span.textContent = letter;
+      span.style.animationDelay = `${i * 0.15}s`;
+      welcomeEl.appendChild(span);
+    });
+
+    const localLogo = document.getElementById('local-logo');
+    const loaderDots = document.getElementById('loader-dots');
+    const modal = document.getElementById('no-internet');
+    const blackout = document.getElementById('blackout');
+
+    // Test image to check remote availability
+    const testRemote = new Image();
+    testRemote.src = "https://i.pinimg.com/originals/21/21/52/2121524ed1fa00d650d702070008ff2a.gif";
+
+    let remoteLoaded = false;
+
+    testRemote.onload = () => {
+      remoteLoaded = true;
+      loaderDots.style.display = "flex";
+      checkBothDone();
+    };
+
+    testRemote.onerror = () => {
+      modal.style.display = "block";
+      checkBothDone();
+    };
+
+    localLogo.onload = () => {
+      checkBothDone();
+    };
+
+    function checkBothDone() {
+      if (localLogo.complete) {
+        setTimeout(() => {
+          blackout.classList.add('show');
+          setTimeout(() => {
+            window.location.href = 'Home.html';
+          }, 2000);
+        }, 3500);
+      }
+    }
+  </script>
+</body>
+</html>

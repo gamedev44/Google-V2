@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Google V2 Home</title>
+  <style>
+    html { height: 100%; }
+    body {
+      --vh: 1vh;
+      background: #252525;
+      color: white;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: calc(var(--vh) * 100);
+      padding-top: 6em;  /* push content down so logo sits below top nav */
+      padding-bottom: 4.5em; /* room for bottom nav + footer */
+      opacity: 0;
+      transition: opacity 2.5s ease;
+    }
+    body.loaded { opacity: 1; }
+
+    /* hide native scrollbar */
+    ::-webkit-scrollbar { width: 0; height: 0; }
+    body { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* shared nav styles */
+    nav {
+      position: fixed;
+      width: 100%;
+      background: #181818;
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      padding: 1em;
+      z-index: 4;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    /* top nav overrides */
+    nav.top-nav { top: 0; }
+
+    /* bottom nav overrides */
+    nav.bottom-nav { bottom: 0; }
+
+    .logo {
+      max-width: 220px;
+      margin: 2.5em 0 1em;
+      transition: opacity 1s;
+    }
+
+    .search-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: width 0.5s;
+    }
+    .search-section.collapsed {
+      width: 3em;
+    }
+
+    .search-bar-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(30em, 90vw);
+      height: 2.5em;
+      border-radius: 2.5em;
+      transition: width 0.5s, border-radius 0.5s;
+      overflow: hidden;
+      background: #444;
+    }
+    .search-section.collapsed .search-bar-container {
+      width: 3em;
+      border-radius: 50%;
+      justify-content: center;
+    }
+    .search-bar-container:hover,
+    .search-bar-container:focus-within {
+      width: min(30em, 90vw) !important;
+      border-radius: 2.5em !important;
+    }
+
+    input#search-bar {
+      flex: 1;
+      height: 100%;
+      padding: 0 1em;
+      border: none;
+      font-size: 1em;
+      background: transparent;
+      color: white;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    .search-section.collapsed input#search-bar { display: none; }
+    input#search-bar:focus {
+      background: white;
+      color: black;
+      outline: none;
+    }
+
+    #search-btn {
+      flex: 0 0 3em;
+      height: 100%;
+      border: none;
+      background: #3c3c3c;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      transition: transform 0.2s, background 0.3s;
+    }
+    #search-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+
+    .nav-btns {
+      display: flex;
+      gap: 1em;
+      margin-top: 2em;
+      flex-wrap: wrap;
+      justify-content: center;
+      transition: opacity 0.3s;
+    }
+    .search-section.collapsed .nav-btns {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .nav-btns button {
+      padding: 0.5em 1.2em;
+      border: none;
+      border-radius: 999px;
+      background: #3c3c3c;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .nav-btns button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+    .nav-btns button.active {
+      background: linear-gradient(270deg, #00d2ff, #3a47d5, #8c42f3);
+      background-size: 600% 600%;
+      animation: gradientShift 5s ease infinite;
+      box-shadow: 0 0 12px #00d2ff, 0 0 20px #8c42f3;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    footer {
+      position: fixed;
+      bottom: 3.5em;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9em;
+      color: #ccc;
+    }
+    footer a { color: #4ea3ff; }
+
+    @media (max-width: 600px) {
+      .nav-btns { gap: 0.5em; }
+      .nav-btns button { padding: 0.4em 0.8em; font-size: 0.9em; }
+      nav { gap: 1em; padding: 0.8em; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <a href="Home.html">Home</a>
+    <a href="Lense.html">Lens</a>
+    <a href="Dorkle.html">Dorkle</a>
+  </nav>
+
+  <img id="main-logo" class="logo" src="Logo/Gif/google logo.gif" alt="Animated Logo">
+
+  <div class="search-section" id="search-sec">
+    <div class="search-bar-container">
+      <input id="search-bar" type="text" placeholder="Search something…" autofocus />
+      <button id="search-btn" title="Search">🔍</button>
+    </div>
+    <div class="nav-btns">
+      <button data-type="images">Images</button>
+      <button data-type="news">News</button>
+      <button data-type="shopping">Shopping</button>
+      <button data-type="videos">Videos</button>
+    </div>
+  </div>
+
+  <footer>
+    Google V2 Alpha Edition 2025&nbsp;|&nbsp;
+    Created by: Risk&nbsp;|&nbsp;
+    <a href="https://gist.github.com/gamedev44/04c21006def2d0ffe54ecc1b57aca2cd" target="_blank">My Resume</a>
+  </footer>
+
+  <nav class="bottom-nav">
+    <a href="Home.html">Home</a>
+    <a href="Lense.html">Lens</a>
+    <a href="Dorkle.html">Dorkle</a>
+  </nav>
+
+  <script>
+    function setVh(){
+      document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+    }
+    window.addEventListener('resize', setVh);
+    setVh();
+
+    const tbmMap = { images:'isch', news:'nws', shopping:'shop', videos:'vid' };
+    let collapseTimer;
+    const sec = document.getElementById('search-sec');
+    const input = document.getElementById('search-bar');
+    const btn = document.getElementById('search-btn');
+    const navs = document.querySelectorAll('.nav-btns button');
+
+    function runSearch(type){
+      const q = input.value.trim();
+      if(!q)return;
+      let url = 'https://www.google.com/search?q=' + encodeURIComponent(q);
+      if(tbmMap[type]) url += '&tbm=' + tbmMap[type];
+      window.open(url, '_blank');
+    }
+    function runDefaultSearch(){
+      const q = input.value.trim();
+      if(!q)return;
+      window.open('https://www.google.com/search?q=' + encodeURIComponent(q), '_blank');
+    }
+    function toggleType(btn, type){
+      btn.classList.toggle('active');
+      if(btn.classList.contains('active')) runSearch(type);
+    }
+    function scheduleCollapse(){
+      clearTimeout(collapseTimer);
+      collapseTimer = setTimeout(()=>{
+        sec.classList.add('collapsed');
+      }, 5000);
+    }
+
+    window.addEventListener('load', ()=>{
+      document.body.classList.add('loaded');
+      scheduleCollapse();
+      setTimeout(()=>{
+        document.getElementById('main-logo').src = "Logo/Static/Static.gif";
+      }, 7570);
+
+      sec.addEventListener('mouseenter', ()=>{
+        sec.classList.remove('collapsed');
+        clearTimeout(collapseTimer);
+      });
+      sec.addEventListener('mouseleave', scheduleCollapse);
+      input.addEventListener('focus', ()=>{
+        sec.classList.remove('collapsed');
+        clearTimeout(collapseTimer);
+      });
+      input.addEventListener('blur', scheduleCollapse);
+
+      input.addEventListener('keydown', e=>{
+        if(e.key==='Enter') runDefaultSearch();
+      });
+      btn.addEventListener('click', runDefaultSearch);
+
+      navs.forEach(b=>{
+        const t = b.dataset.type;
+        b.addEventListener('click', ()=>toggleType(b, t));
+      });
+    });
+  </script>
+</body>
+</html>
