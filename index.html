@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Fresh, modern Google search UI with improved functionality and responsiveness by Risk." />
+  <meta name="keywords" content="Risk, Google Search, Modern UI, Responsive design, Search functionality" />
+  <meta name="author" content="Risk" />
+  <meta property="og:title" content="Risk's Modern Google Search UI" />
+  <meta property="og:description" content="A fresh, improved, and modern way to search Google with new UI and functionality responsiveness." />
+  <meta property="og:image" content="Logo/Gif/LoaderLogo.gif" />
   <title>Loading...</title>
   <style>
     html, body {
@@ -49,7 +56,6 @@
       opacity: 0;
     }
 
-
     .loader-dots img:nth-child(1) { animation-delay: 0s; }
     .loader-dots img:nth-child(2) { animation-delay: 0.3s; }
     .loader-dots img:nth-child(3) { animation-delay: 0.6s; }
@@ -70,11 +76,16 @@
     .modal {
       position: absolute;
       top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       background: crimson;
       padding: 1em 2em;
       border-radius: 6px;
       font-weight: bold;
       display: none;
+      z-index: 20;
+      text-align: center;
+      max-width: 80%;
     }
 
     .blackout {
@@ -98,16 +109,17 @@
   <div id="welcome" class="fade-letter"></div>
 
   <div class="logo-wrapper">
-    <img id="local-logo" src="Logo/Gif/LoaderLogo.gif" alt="Local Loader Logo" /> <!-- IT LOADS THIS LARGE LOAD LOGO ABOVE -->
-
+    <img id="local-logo" src="Logo/Gif/LoaderLogo.gif" alt="Local Loader Logo" />
     <div class="loader-dots" id="loader-dots" style="display: none;">
-      <!-- 3 blinking remote loader dots -->
       <img src="https://i.ibb.co/CppWL2Sg/loader-Dot.gif" alt="dot">
       <img src="https://i.ibb.co/CppWL2Sg/loader-Dot.gif" alt="dot">
       <img src="https://i.ibb.co/CppWL2Sg/loader-Dot.gif" alt="dot">
     </div>
   </div>
 
+  <div class="modal" id="info-modal">
+    Made by Risk: A fresh, improved, and modern way to search Google with a new UI and functional responsiveness.
+  </div>
   <div class="modal" id="no-internet">⚠️ No Internet Connection. Remote loader failed.</div>
   <div class="blackout" id="blackout"></div>
 
@@ -123,8 +135,15 @@
 
     const localLogo = document.getElementById('local-logo');
     const loaderDots = document.getElementById('loader-dots');
-    const modal = document.getElementById('no-internet');
+    const noInternetModal = document.getElementById('no-internet');
+    const infoModal = document.getElementById('info-modal');
     const blackout = document.getElementById('blackout');
+
+    // show info modal on load
+    infoModal.style.display = 'block';
+    infoModal.addEventListener('click', () => {
+      infoModal.style.display = 'none';
+    });
 
     // Test image to check remote availability
     const testRemote = new Image();
@@ -139,7 +158,7 @@
     };
 
     testRemote.onerror = () => {
-      modal.style.display = "block";
+      noInternetModal.style.display = "block";
       checkBothDone();
     };
 
